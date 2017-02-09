@@ -19,7 +19,8 @@ library(shiny)
 library(dplyr)
 library(rgdal)
 library(leaflet)
-library(leafletplugins)
+#library(leafletplugins)
+library(leaflet.extras)
 source('global.R')
 shinyServer(function(input, output, session) {
     # Reactive for speed
