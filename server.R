@@ -409,7 +409,7 @@ shinyServer(function(input, output, session) {
         filename = function() {
             switch(input$i_filetype
                    , Litchi = paste0(input$i_filename,'.csv')
-                   , Ardupilot = paste0(input$i_filename,'.waypoints'))
+                   , Ardupilot = paste0(input$i_filename,'.txt'))
         },
         content = function(file) {
             wp <- output_data()
