@@ -40,6 +40,7 @@ shinyServer(function(input, output, session) {
     r_speed <- reactive({
         speed <- input$i_flight_speed
         if (input$i_speed_unit == 'm/s') {
+            #TODO: This always converts speed to km/h, only do this on export
             speed <- speed * 3.6
         }
         speed
@@ -216,7 +217,7 @@ shinyServer(function(input, output, session) {
         direction <- direction - 90
         direction[direction < 0] <- direction[direction < 0] + 360
 
-        speed <- rep(r_speed(), length(distance))
+        speed <- rep(input$i_flight_speed, length(distance))
         #speed[length(speed)] <- 0
 
 
@@ -409,7 +410,7 @@ shinyServer(function(input, output, session) {
         filename = function() {
             switch(input$i_filetype
                    , Litchi = paste0(input$i_filename,'.csv')
-                   , Ardupilot = paste0(input$i_filename,'.waypoints'))
+                   , Ardupilot = paste0(input$i_filename,'.txt'))
         },
         content = function(file) {
             wp <- output_data()
@@ -463,7 +464,7 @@ shinyServer(function(input, output, session) {
                                 )
                 wp1 <- c(wp1, sprintf(
                     '2	0	3	178	0.000000	%f	0.000000	0.000000	0.000000	0.000000	0.000000	1'
-                    , wp$speed[1]
+                    , (wp$speed[1]/3.6)
                 ))
                 wp2 <- data.frame(V0 = seq(3, length.out = nrow(wp))
                                   , V1 =  '0	3	16	0.000000	0.000000	0.000000	0.000000'
