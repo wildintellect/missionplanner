@@ -15,14 +15,27 @@ colour_value_map <- function(value, constrains, reverse = FALSE) {
     col[pos]
 }
 
+library(RCurl)
 library(shiny)
 library(dplyr)
 library(rgdal)
 library(leaflet)
-#library(leafletplugins)
 library(leaflet.extras)
 source('global.R')
 shinyServer(function(input, output, session) {
+    # Reactive for camera
+    r_camera <- reactive({
+        x <- getURL("https://raw.githubusercontent.com/byzheng/missionplanner/master/camera.csv")
+        y <- read.csv(text = x)
+        y
+    })
+    observe({
+        cameras <- r_camera()
+        updateSelectInput(
+            session, 'i_camera_list',
+            choices = cameras$name, 
+            selected = cameras$name[1])
+    })
     # Reactive for speed
     r_speed <- reactive({
         speed <- input$i_flight_speed
@@ -46,6 +59,7 @@ shinyServer(function(input, output, session) {
     # Observe for change camera
     observe({
         req(input$i_camera_list)
+        cameras <- r_camera()
         sel_camera <- cameras %>%
             filter(name == input$i_camera_list)
         req(nrow(sel_camera) > 0)
@@ -109,18 +123,17 @@ shinyServer(function(input, output, session) {
                 'Esri.WorldImagery', group = 'Satellite'
                 , options = tileOptions(maxZoom = 28, maxNativeZoom = 17)) %>%
             addDrawToolbar(
-                layerID = 'draw', group = 'Field'
-                , polyline = FALSE, polygon = TRUE
-                , rectangle = FALSE, circle = FALSE
-                , marker = FALSE, edit = TRUE, remove = TRUE
+                targetGroup = 'Field'
+                , polylineOptions = FALSE, polygonOptions = drawPolygonOptions()
+                , circleOptions = FALSE, rectangleOptions = FALSE
+                , markerOptions = FALSE, editOptions = editToolbarOptions()
                 , position = 'topleft') %>%
             addScaleBar('bottomleft', options = scaleBarOptions(imperial = FALSE)) %>%
             addControlGPS() %>%
             addMeasure(position = 'bottomleft'
                        , primaryAreaUnit = 'sqmeters'
                        , primaryLengthUnit = 'meters') %>%
-            addSearchOSM(url ='https://nominatim.openstreetmap.org/search?format=json&q={s}',
-                         position = 'topright') %>%
+            addSearchOSM(options = searchOSMOptions(position = 'topright')) %>%
             addLayersControl(
                 baseGroups = c('OSM', 'Satellite')
                 , overlayGroups = c('Field', 'Flight', 'Points')
@@ -159,10 +172,10 @@ shinyServer(function(input, output, session) {
 
     # Reactive for way points
     r_way_points <- reactive({
-        req(input$o_map_draw_features)
+        req(input$o_map_draw_all_features)
         req(input$i_grid_offset)
         offset <- input$i_grid_offset
-        ply <- input$o_map_draw_features
+        ply <- input$o_map_draw_all_features
         req(length(ply$features) > 0)
         # save(list = ls(), file = 'tmp.RData')
 
@@ -484,14 +497,14 @@ shinyServer(function(input, output, session) {
     })
 
     observe({
-        req(input$o_map_draw_editing)
+        req(input$o_map_draw_editstart)
         leafletProxy('o_map') %>%
             clearPopups() %>%
             clearGroup('Flight')
     })
 
     observe({
-        req(input$o_map_draw_deleting)
+        req(input$o_map_draw_deletestart)
         leafletProxy('o_map') %>%
             clearPopups() %>%
             clearGroup('Flight')
