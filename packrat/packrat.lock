@@ -76,6 +76,16 @@ Source: CRAN
 Version: 1.3-2
 Hash: 0bf8618b585fa98eb23414cd3ab95118
 
+Package: crosstalk
+Source: github
+Version: 1.0.1
+Hash: 1a3a6c072c33a57ed2b334ececa9c9a6
+Requires: R6, ggplot2, htmltools, jsonlite, lazyeval, shiny
+GithubRepo: crosstalk
+GithubUsername: rstudio
+GithubRef: master
+GithubSha1: 6a36da10f03d463ecb427fea649571be84b9bb43
+
 Package: curl
 Source: CRAN
 Version: 2.3
@@ -189,11 +199,25 @@ Version: 0.2.0
 Hash: 3d6e7608e65bbf5cb170dab1e3c9ed8b
 
 Package: leaflet
-Source: CRAN
-Version: 1.0.1
-Hash: 749ac8c776a57c686ab8c90b5a6818fb
-Requires: RColorBrewer, base64enc, htmltools, htmlwidgets, magrittr,
-    markdown, png, raster, scales, sp
+Source: github
+Version: 1.0.2.9010
+Hash: 9e50272e9245860e16c041e42af04dc3
+Requires: RColorBrewer, base64enc, crosstalk, htmltools, htmlwidgets,
+    magrittr, markdown, png, raster, scales, sp, viridis
+GithubRepo: leaflet
+GithubUsername: rstudio
+GithubRef: master
+GithubSha1: b9736ecbe3f4941c92d37506c7fd9d6923f22768
+
+Package: leaflet.extras
+Source: github
+Version: 0.1.9006
+Hash: daf4c9a1a69e38a212a9fbf6c2571e11
+Requires: htmltools, htmlwidgets, leaflet, magrittr, shiny
+GithubRepo: leaflet.extras
+GithubUsername: byzheng
+GithubRef: master
+GithubSha1: 3558bfe46d304a96204a9e5414574a1fe3c674b2
 
 Package: magrittr
 Source: CRAN

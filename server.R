@@ -464,7 +464,7 @@ shinyServer(function(input, output, session) {
                                 )
                 wp1 <- c(wp1, sprintf(
                     '2	0	3	178	0.000000	%f	0.000000	0.000000	0.000000	0.000000	0.000000	1'
-                    , (wp$speed[1]/3.6)
+                    , (wp$speed[1])
                 ))
                 wp2 <- data.frame(V0 = seq(3, length.out = nrow(wp))
                                   , V1 =  '0	3	16	0.000000	0.000000	0.000000	0.000000'

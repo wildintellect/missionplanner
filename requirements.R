@@ -5,7 +5,7 @@ install.packages(pkgs)
 
 #Needs newer leaflet
 devtools::install_github('rstudio/leaflet')
-#devtools::install_github('bhaskarvk/leaflet.extras')
-devtools::install_github('byzheng/leaflet.extras')
+devtools::install_github('bhaskarvk/leaflet.extras')
+#devtools::install_github('byzheng/leaflet.extras')
 
 
